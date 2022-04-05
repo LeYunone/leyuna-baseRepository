@@ -1,5 +1,6 @@
 package com.leyuna.base.repository;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -147,14 +148,28 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO, CO> extends S
         return TransformationUtil.copyToLists(ds, COclass);
     }
 
+    /**
+     * 条件排序
+     * @param condition
+     * @param isDesc
+     * @param con
+     * @return
+     */
     @Override
     public List<CO> selectByConOrder (String condition, boolean isDesc, Object con) {
-        QueryWrapper queryWrapper = orderSql(condition, isDesc, con);
+        QueryWrapper queryWrapper = orderEqSql(condition, isDesc, con);
         List<DO> ds = this.baseMapper.selectList(queryWrapper);
         return TransformationUtil.copyToLists(ds, COclass);
     }
 
-    private QueryWrapper orderSql (String condition, boolean isDesc, Object con) {
+    /**
+     * eq条件排序语句
+     * @param condition
+     * @param isDesc
+     * @param con
+     * @return
+     */
+    private QueryWrapper orderEqSql (String condition, boolean isDesc, Object con) {
         Object copy = TransformationUtil.copyToDTO(con, DOclass);
         QueryWrapper<DO> dQueryWrapper = null;
         if (isDesc) {
@@ -165,6 +180,13 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO, CO> extends S
         return dQueryWrapper;
     }
 
+    /**
+     * 分页查询 all eq
+     * @param con
+     * @param index
+     * @param size
+     * @return
+     */
     @Override
     public Page<CO> selectByPage (Object con, Integer index, Integer size) {
         Page<DO> page = new Page<>(index, size);
@@ -177,10 +199,10 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO, CO> extends S
 
     @Override
     public Page<CO> selectByConOrderPage (Object con, Integer index, Integer size, String condition, boolean isDesc) {
-        Map<String, Object> stringObjectMap = TransformationUtil.transDTOColumnMap(con);
-        QueryWrapper queryWrapper = orderSql(condition, isDesc, con);
+        QueryWrapper queryWrapper = orderEqSql(condition, isDesc, con);
         Page page = new Page(index, size);
         IPage<DO> ipage = this.baseMapper.selectPage(page, queryWrapper);
         return TransformationUtil.copyToPage(ipage, COclass);
     }
+    
 }

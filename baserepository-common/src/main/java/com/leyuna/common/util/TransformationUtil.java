@@ -117,6 +117,13 @@ public class TransformationUtil {
         return result;
     }
 
+    /**
+     * 转换分页对象的record
+     * @param page
+     * @param toClass
+     * @param <D>
+     * @return
+     */
     public static <D> Page<D> copyToPage (IPage page, Class<D> toClass) {
         Page<D> result = new Page<>();
         result.setRecords(TransformationUtil.copyToLists(page.getRecords(), toClass));
