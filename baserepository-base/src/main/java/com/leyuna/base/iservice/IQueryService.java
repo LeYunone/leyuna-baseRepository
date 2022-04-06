@@ -46,5 +46,8 @@ public interface IQueryService<T> extends IQueryPageService{
      * @return
      */
     List<T> selectByConOrder(String condition,boolean isDesc,Object con);
-    
+
+    List<T> selectLike (Object con, String field,String likeName);
+
+    List<T> selectLike (Object con, boolean isDesc,String field,String likeName);
 }

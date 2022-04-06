@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leyuna.base.iservice.IBaseRepository;
@@ -23,7 +24,7 @@ import java.util.Map;
  *
  * @author pengli
  * @since 2022-03-28
- * 基础服务类1  需要调节 - DO[实体]  CO[出参]  M[mapper]
+ * 基础服务类1  需要 - DO[实体]  CO[出参]  M[mapper]
  */
 public abstract class BaseRepository<M extends BaseMapper<DO>, DO, CO> extends ServiceImpl<M, DO> implements IBaseRepository<CO> {
     private Class COclass;
@@ -150,6 +151,7 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO, CO> extends S
 
     /**
      * 条件排序
+     *
      * @param condition
      * @param isDesc
      * @param con
@@ -164,6 +166,7 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO, CO> extends S
 
     /**
      * eq条件排序语句
+     *
      * @param condition
      * @param isDesc
      * @param con
@@ -173,15 +176,18 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO, CO> extends S
         Object copy = TransformationUtil.copyToDTO(con, DOclass);
         QueryWrapper<DO> dQueryWrapper = null;
         if (isDesc) {
-            dQueryWrapper = new QueryWrapper<DO>().allEq(TransformationUtil.transDTOColumnMap(copy), false).orderByDesc(condition);
+            dQueryWrapper = new QueryWrapper<DO>().allEq(TransformationUtil.transDTOColumnMap(copy), false)
+                    .orderByDesc(StringUtils.isNotEmpty(condition), condition);
         } else {
-            dQueryWrapper = new QueryWrapper<DO>().allEq(TransformationUtil.transDTOColumnMap(copy), false).orderByAsc(condition);
+            dQueryWrapper = new QueryWrapper<DO>().allEq(TransformationUtil.transDTOColumnMap(copy), false)
+                    .orderByAsc(StringUtils.isNotEmpty(condition), condition);
         }
         return dQueryWrapper;
     }
 
     /**
      * 分页查询 all eq
+     *
      * @param con
      * @param index
      * @param size
@@ -204,5 +210,28 @@ public abstract class BaseRepository<M extends BaseMapper<DO>, DO, CO> extends S
         IPage<DO> ipage = this.baseMapper.selectPage(page, queryWrapper);
         return TransformationUtil.copyToPage(ipage, COclass);
     }
-    
+
+    @Override
+    public List<CO> selectLike (Object con, String field,String likeName) {
+        QueryWrapper queryWrapper = orderEqSql(null, false, con);
+        queryWrapper.like(field,likeName);
+        return this.baseMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<CO> selectLike (Object con, boolean isDesc,String field,String likeName) {
+        QueryWrapper queryWrapper = orderEqSql(null, isDesc, con);
+        queryWrapper.like(field,likeName);
+        return this.baseMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public Page<CO> selectLikeByPage (Object con, Integer index, Integer size,String field,String likeName) {
+        Page<DO> page = new Page<>(index, size);
+        QueryWrapper queryWrapper = orderEqSql(null, false, con);
+        queryWrapper.like(field,likeName);
+        IPage<DO> doPage = this.baseMapper.selectPage(page, queryWrapper);
+
+        return TransformationUtil.copyToPage(doPage, COclass);
+    }
 }

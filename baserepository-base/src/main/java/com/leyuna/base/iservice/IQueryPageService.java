@@ -27,4 +27,6 @@ public interface IQueryPageService<T>{
      * @return
      */
     Page<T> selectByConOrderPage(Object con,Integer index,Integer size,String condition,boolean isDesc);
+
+    Page<T> selectLikeByPage (Object con, Integer index, Integer size,String field,String likeName);
 }
