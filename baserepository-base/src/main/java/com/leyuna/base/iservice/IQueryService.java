@@ -1,7 +1,6 @@
 package com.leyuna.base.iservice;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.io.Serializable;
 import java.util.List;
