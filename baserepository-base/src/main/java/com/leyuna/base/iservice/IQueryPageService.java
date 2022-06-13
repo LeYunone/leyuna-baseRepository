@@ -6,16 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @author pengli
  * @date 2022-04-05
  */
-public interface IQueryPageService<T>{
+public interface IQueryPageService<DO>{
 
     /**
      * 万能eq分页查询
-     * @param con
-     * @param index
-     * @param size
      * @return
      */
-    Page<T> selectByPage (Object con, Integer index, Integer size);
+    Page<DO> selectByConPage(Object o, Page page);
 
     /**
      * 万能eq分页查询 根据condition和isDesc排序查询
@@ -26,5 +23,5 @@ public interface IQueryPageService<T>{
      * @param isDesc
      * @return
      */
-    Page<T> selectByConOrderPage(Object con,Integer index,Integer size,String condition,boolean isDesc);
+    Page<DO> selectByConOrderPage(Object con,Integer index,Integer size,String condition,boolean isDesc);
 }

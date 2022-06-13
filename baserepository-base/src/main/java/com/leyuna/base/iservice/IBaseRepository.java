@@ -1,5 +1,8 @@
 package com.leyuna.base.iservice;
 
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,14 +10,13 @@ import java.util.List;
  * @create 2022-03-28 16:54
  * 基础服务接口 T规定  入参
  */
-public interface IBaseRepository<T> extends IQueryService<T> {
+public interface IBaseRepository<DO> extends IQueryService<DO> {
 
     /**
      * 插入或更新 ： 带id更新  反之插入
-     * @param o
      * @return
      */
-    T insertOrUpdate(Object o);
+    boolean insertOrUpdate(Object entity);
 
     /**
      * 批量插入
@@ -28,7 +30,7 @@ public interface IBaseRepository<T> extends IQueryService<T> {
      * @param id
      * @return
      */
-    int delete(Object id);
+    boolean deleteById(Serializable id);
 
     /**
      * 根据ids批量删除
@@ -36,4 +38,6 @@ public interface IBaseRepository<T> extends IQueryService<T> {
      * @return
      */
     int batchDelete(List ids);
+
+    <R> boolean deleteLogicById(Serializable id, SFunction<DO, R> tableId,SFunction<DO,R> deleted);
 }

@@ -1,7 +1,9 @@
 package com.leyuna.base.iservice;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,42 +11,23 @@ import java.util.List;
  * @date 2022-04-05
  * 封装查询接口
  */
-public interface IQueryService<T> extends IQueryPageService{
+public interface IQueryService<DO> extends IQueryPageService{
 
-    /**
-     * 根据id查询
-     * @param id  object：id可能为str或Integer或...
-     * @return
-     */
-    T selectById(Object id);
+    List<DO> selectByCon(Object o);
 
-    /**
-     * 根据ids查询
-     * @param ids
-     * @return
-     */
-    List<T> selectByIds(List ids);
+    List<DO> selectByCon(LambdaQueryWrapper<DO> queryWrapper);
 
-    /**
-     * 只查询一条
-     * @param con
-     * @return
-     */
-    T selectOne(Object con);
+    List<DO> selectByCon(Object o, LambdaQueryWrapper<DO> queryWrapper);
 
-    /**
-     * 万能eq查询 根据con查询 所有条件均是eq
-     * @param con
-     * @return
-     */
-    List<T> selectByCon(Object con);
+    <R> List<R> selectByCon(Object o, Class<R> clazz);
 
-    /**
-     * 万能eq排序查询 根据condition和isDesc指定排序条件
-     * @param condition
-     * @param con
-     * @return
-     */
-    List<T> selectByConOrder(String condition,boolean isDesc,Object con);
-    
+    <R> List<R> selectByCon(Object o, Class<R> clazz, LambdaQueryWrapper<DO> queryWrapper);
+
+    <R> R selectById(Serializable id, Class<R> clazz);
+
+    DO selectById(Serializable id);
+
+    <R> R selectOne(Object o, Class<R> clazz);
+
+    DO selectOne(Object o);
 }
