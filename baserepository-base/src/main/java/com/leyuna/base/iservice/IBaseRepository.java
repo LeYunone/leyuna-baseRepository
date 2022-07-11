@@ -23,7 +23,7 @@ public interface IBaseRepository<DO> extends IQueryService<DO> {
      * @param params  会通过copy转换为实体
      * @return
      */
-    boolean batchCreate(List params);
+    boolean insertOrUpdateBatch(List params);
 
     /**
      * 根据id删除
@@ -37,7 +37,7 @@ public interface IBaseRepository<DO> extends IQueryService<DO> {
      * @param ids
      * @return
      */
-    int batchDelete(List ids);
+    boolean deleteByIdBatch(List ids);
 
-    <R> boolean deleteLogicById(Serializable id, SFunction<DO, R> tableId,SFunction<DO,R> deleted);
+    <R> boolean deleteLogicById(Serializable id, SFunction<DO, R> tableId);
 }

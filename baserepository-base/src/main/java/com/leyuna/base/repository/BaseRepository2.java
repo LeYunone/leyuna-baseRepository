@@ -140,12 +140,12 @@ public abstract class BaseRepository2<M extends BaseMapper<DO>, DO, T> extends S
      * @return
      */
     @Override
-    public <R> boolean deleteLogicById(Serializable id, SFunction<DO, R> tableId,SFunction<DO,R> deleted) {
+    public <R> boolean deleteLogicById(Serializable id, SFunction<DO, R> tableId) {
         UpdateWrapper<DO> updateWrapper = new UpdateWrapper<DO>();
+        updateWrapper.set("isDeleted","1");
         LambdaUpdateWrapper<DO> lambda = updateWrapper.lambda();
         lambda.eq(tableId, id);
         //逻辑为1时删除
-        lambda.set(deleted,1);
         return super.update(lambda);
     }
 

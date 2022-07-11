@@ -22,7 +22,7 @@ public interface IQueryService<DO> extends IQueryPageService{
 
     <R> List<R> selectByCon(Object o, Class<R> clazz, LambdaQueryWrapper<DO> queryWrapper);
 
-    <R> R selectById(Serializable id, Class<R> clazz);
+    <R> R selectById(Serializable id, Class<R> clazz) throws IllegalAccessException, InstantiationException;
 
     DO selectById(Serializable id);
 
