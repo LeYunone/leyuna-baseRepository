@@ -10,7 +10,7 @@ import java.util.List;
  * @date 2022-04-05
  * 封装查询接口
  */
-public interface IQueryService<DO> extends IQueryPageService{
+public interface IQueryService<DO> extends IQueryPageService<DO>{
 
     List<DO> selectByCon(Object o);
 

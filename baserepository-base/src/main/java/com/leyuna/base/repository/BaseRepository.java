@@ -54,7 +54,7 @@ public  class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M,
     }
 
     @Override
-    public boolean deleteByIdBatch(List ids) {
+    public boolean deleteByIds(List ids) {
         return super.removeByIds(ids);
     }
 
